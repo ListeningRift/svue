@@ -5,6 +5,7 @@
   "main": "lib/svue.cjs.js",
   "module": "lib/svue.esm.js",
   "browser": "lib/svue.umd.js",
+  "typings": "lib/svue.d.ts",
   "files": [
     "dist"
   ],

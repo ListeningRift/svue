@@ -7,7 +7,7 @@ const dom2 = createVNode("div", {
 }, [createVNode("p", null, ["test dom 2"])]);
 const demo = defineComponent({
   name: 'demo',
-  setup(props) {
+  setup(props, slots) {
     const model = ref(true);
     const onButtonClick = () => {
       model.value = !model.value;
@@ -33,7 +33,8 @@ const demo = defineComponent({
     onUnmounted(() => {
       console.log('unmounted');
     });
-    return () => createVNode("div", null, [props.value, model.value ? dom1 : dom2, createVNode("button", {
+    console.log(slots);
+    return () => createVNode("div", null, [slots[0], model.value ? dom1 : dom2, createVNode("button", {
       "onClick": onButtonClick
     }, ["change!"])]);
   }
@@ -47,7 +48,7 @@ const App = defineComponent({
     };
     return () => createVNode("div", null, [count.value < 3 ? createVNode(demo, {
       "value": count.value
-    }, []) : createVNode("div", null, []), createVNode("div", {
+    }, [count.value]) : createVNode("div", null, []), createVNode("div", {
       "onClick": onClick
     }, [count.value])]);
   }

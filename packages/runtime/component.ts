@@ -3,7 +3,7 @@ import { toRaw } from '../reactivity'
 import { isFunction } from '../utils'
 
 export type RenderFunction = () => VNode
-export type SetupFunction = (props: any) => RenderFunction
+export type SetupFunction = (props?: VNodePropsType | null, slots?: VNodeChildrenType | null) => RenderFunction
 
 export interface ComponentOptions {
   name: string
@@ -23,7 +23,7 @@ export class Component {
   public vNode?: VNode
   public subtree?: VNode
   public props: VNodePropsType = {}
-  public slots?: VNodeChildrenType | null
+  public slots: VNodeChildrenType = []
 
   public 'beforeCreate': HookFunction[] = []
   public 'created': HookFunction[] = []
@@ -47,12 +47,16 @@ export class Component {
     for (const key in rawProps) {
       this.props[key] = rawProps[key]
     }
-    this.slots = slots
+    if (slots) {
+      slots.forEach((slot, index) => {
+        this.slots[index] = slot
+      })
+    }
   }
 
   public setup() {
     setCurrentInstance(this)
-    this.render = this.options.setup(this.props)
+    this.render = this.options.setup(this.props, this.slots)
     unsetCurrentInstance()
   }
 }

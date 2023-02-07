@@ -22,7 +22,7 @@ const dom2 = (<div class="test-dom-2">
 
 const demo = defineComponent({
   name: 'demo',
-  setup(props) {
+  setup(props, slots) {
     const model = ref(true)
     const onButtonClick = () => {
       model.value = !model.value
@@ -48,8 +48,9 @@ const demo = defineComponent({
     onUnmounted(() => {
       console.log('unmounted')
     })
+    console.log(slots)
     return () => (<div>
-      {props.value}
+      {slots[0]}
       {model.value ? dom1 : dom2}
       <button onClick={onButtonClick}>change!</button>
     </div>)
@@ -64,7 +65,7 @@ const App = defineComponent({
       count.value++
     }
     return () => (<div>
-      { count.value < 3 ? <demo value={count.value}></demo> : <div></div> }
+      { count.value < 3 ? <demo value={count.value}>{count.value}</demo> : <div></div> }
       <div onClick={onClick}>{count.value}</div>
     </div>)
   }
