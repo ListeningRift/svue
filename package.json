@@ -1,0 +1,59 @@
+{
+  "name": "svue",
+  "version": "0.0.1",
+  "description": "A simple virtual dom",
+  "main": "lib/svue.cjs.js",
+  "module": "lib/svue.esm.js",
+  "browser": "lib/svue.umd.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:prod": "rimraf ./dist && rollup -c rollup.config.prod.js && pnpm doc",
+    "build:dev": "rimraf ./dist && rollup -c rollup.config.dev.js",
+    "dev": "rollup -c rollup.config.dev.js -w",
+    "dev:compiler": "onchange -i \"packages/compiler/index.js\" \"examples/index.jsx\"  -- pnpm compiler",
+    "lint": "eslint packages --fix --ext .ts",
+    "compiler": "babel ./examples/index.jsx --config-file ./packages/compiler/complier.babel.json --out-file ./examples/index.out.js"
+  },
+  "keywords": [
+    "virtual dom"
+  ],
+  "author": "Rift",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/runtime": "^7.20.7",
+    "@babel/runtime-corejs3": "^7.20.7",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-strip": "^3.0.2",
+    "@rollup/plugin-terser": "^0.3.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/lodash": "^4.14.191",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "onchange": "^7.1.0",
+    "prettier": "^2.8.2",
+    "rimraf": "^4.0.5",
+    "rollup": "^3.9.1",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^2.0.2",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.2.0",
+    "html-tags": "^3.2.0",
+    "lodash": "^4.17.21",
+    "svg-tags": "^1.0.0"
+  }
+}
