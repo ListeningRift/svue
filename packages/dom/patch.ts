@@ -127,19 +127,12 @@ export function patch(oldVDom: VNode | null, newVDom: VNode, el: HTMLElement) {
 
   if (newVDom.__typeFlag === TypeFlag.COMPONENT) {
     const instance = newVDom.__component = oldVDom.__component
-    if (instance.__isMounted) {
-      invokeArrayFns(instance.beforeUpdate)
-      patchComponent(oldVDom!, newVDom)
-      const newTree = instance.render()
-      const oldTree = instance.subtree
-      patch(oldTree!, newTree, el)
-      invokeArrayFns(instance.updated)
-    } else {
-      invokeArrayFns(instance.beforeMount)
-      patch(null, instance.subtree!, el)
-      invokeArrayFns(instance.mounted)
-      instance.__isMounted = true
-    }
+    invokeArrayFns(instance.beforeUpdate)
+    patchComponent(oldVDom!, newVDom)
+    const newTree = instance.render()
+    const oldTree = instance.subtree
+    patch(oldTree!, newTree, el)
+    invokeArrayFns(instance.updated)
   } else {
     newVDom.__el = oldVDom!.__el
     patchProps(oldVDom!, newVDom)

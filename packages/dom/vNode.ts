@@ -1,5 +1,7 @@
+import { watchEffect } from '../reactivity'
 import { Component, isComponent } from '../runtime/component'
 import { invokeArrayFns, isArray, setAttribute } from '../utils'
+import { patch } from './patch'
 
 export const TEXT = Symbol('TEXT')
 
@@ -122,13 +124,21 @@ export function mountComponent(vNode: VNode, container: HTMLElement) {
 
   instance.setComponent(vNode, vNode.props, vNode.children)
   instance.setup()
-  invokeArrayFns(instance.beforeMount)
-  instance.subtree = instance.render()
-  vNode.__component = instance
-  mount(instance.subtree, container)
-  invokeArrayFns(instance.mounted)
-  instance.__isMounted = true
-  vNode.__el = instance.subtree.__el
+  watchEffect(() => {
+    if (!instance.__isMounted) {
+      invokeArrayFns(instance.beforeMount)
+      instance.subtree = instance.render()
+      vNode.__component = instance
+      mount(instance.subtree, container)
+      invokeArrayFns(instance.mounted)
+      instance.__isMounted = true
+      vNode.__el = instance.subtree.__el
+    } else {
+      const prevTree = instance.subtree
+      const nextTree = instance.render()
+      patch(prevTree!, nextTree, instance.subtree!.__el as HTMLElement)
+    }
+  })
 }
 
 export function unmountComponent(vNode: VNode) {
